@@ -1,0 +1,13 @@
+# PUPPETHEADER: This file is owned by Puppet.
+
+PassengerRoot /var/lib/gems/1.9.1/gems/passenger-<%= scope.lookupvar('passenger::data::version') %>
+PassengerRuby /usr/bin/ruby1.9.1
+
+<% if processorcount.to_i >= 8 then -%>
+PassengerMaxPoolSize 12
+<% else -%>
+PassengerMaxPoolSize 6
+<% end -%>
+PassengerMinInstances 1
+PassengerMaxRequests 10000
+PassengerStatThrottleRate 30

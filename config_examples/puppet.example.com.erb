@@ -1,0 +1,38 @@
+# PUPPETHEADER: This file is owned by Puppet.
+
+Listen 8140
+
+<VirtualHost *:8140>
+
+# logging
+  CustomLog /var/log/apache2/puppet.example.com-access.log combined
+  ErrorLog /var/log/apache2/puppet.example.com-error.log
+
+# logging settings
+  LogLevel crit
+
+  SSLEngine on
+  SSLProtocol -ALL +SSLv3 +TLSv1
+  SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+
+  SSLCertificateFile      /home/$some_user/puppet/var/ssl/certs/puppet.example.com.pem
+  SSLCertificateKeyFile   /home/$some_user/puppet/var/ssl/private_keys/puppet.example.com.pem
+  SSLCertificateChainFile /home/$some_user/puppet/var/ssl/certs/ca.pem
+  SSLCACertificateFile    /home/$some_user/puppet/var/ssl/certs/ca.pem
+  SSLCARevocationFile     /home/$some_user/puppet/var/ssl/ca/ca_crl.pem
+  SSLVerifyClient optional
+  SSLVerifyDepth  1
+  SSLOptions +StdEnvVars
+
+  DocumentRoot /home/$some_user/puppet/rack/public
+  RackBaseURI /
+  <Directory /home/$some_user/puppet/rack/public>
+      Options None
+      AllowOverride None
+      Order allow,deny
+      allow from all
+  </Directory>
+
+</VirtualHost>
+
+PassengerPreStart https://puppet.example.com:8140
